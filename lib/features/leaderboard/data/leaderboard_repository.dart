@@ -9,12 +9,12 @@ class LeaderboardRepository {
   Future<List<Entry>> getTopScores() async {
     try {
       final response = await _client
-          .from('leaderboard') // Make sure your table name is 'leaderboard' in Supabase
-          .select('username, score') // Select specific columns
+          .from('leaderboard')
+          .select('username, score')
           .order('score', ascending: false)
           .limit(50);
 
-      // Convert the List<Map> from Supabase into List<ArcadeEntry>
+      // Convert the List<Map> from Supabase into List<Entry>
       final data = List<Map<String, dynamic>>.from(response);
       return data.map((row) => Entry(
         name: row['username'] as String,
