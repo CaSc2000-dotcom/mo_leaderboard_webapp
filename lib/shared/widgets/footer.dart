@@ -18,7 +18,7 @@ class Footer extends StatelessWidget {
             children: [
               // Copyright Text
               Text(
-                "© 2025 GOALS. ALL RIGHTS RESERVED.",
+                "© 2025 MERGEONSLAUGHT. ALL RIGHTS RESERVED.",
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppTheme.textMuted, 
                   fontSize: 12
