@@ -45,15 +45,22 @@ class _HeaderRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      // Adjusted padding to align with row structure
+      // 6.0 (Tab width) + 60.0 (Rank width) = ~66.0 offset
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
       child: Row(
         children: [
+          const SizedBox(width: 16), // Outer margin compensation
           SizedBox(
-            width: 80,
-            child: Text('RANK', style: Theme.of(context).textTheme.labelLarge)
+            width: 60, // Matches the Rank box width roughly
+            child: Padding(
+              padding: const EdgeInsets.only(left: 12.0),
+              child: Text('RANK', style: Theme.of(context).textTheme.labelLarge),
+            ),
           ),
+          const SizedBox(width: 16), // Spacing between Rank and User
           Expanded(
-            child: Text('PLAYER', style: Theme.of(context).textTheme.labelLarge)
+            child: Text('USER', style: Theme.of(context).textTheme.labelLarge),
           ),
           SizedBox(
             width: 120,
@@ -62,6 +69,7 @@ class _HeaderRow extends StatelessWidget {
               style: Theme.of(context).textTheme.labelLarge
             ),
           ),
+          const SizedBox(width: 16), // Outer margin compensation
         ],
       ),
     );
@@ -77,71 +85,109 @@ class _PlayerRow extends StatelessWidget {
     required this.entry,
   });
 
+  // Helper to get metallic gradients
+  Gradient? _getTabGradient(int rank) {
+    switch (rank) {
+      case 1: // Gold
+        return const LinearGradient(
+          colors: [
+            Color(0xFFFFF176), // Bright Yellow
+            Color(0xFFFFD700), // Pure Gold
+            Color(0xFFFFAB00), // Amber/Orange-Gold
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        );
+      case 2: // Silver
+        return const LinearGradient(
+          colors: [
+            Color(0xFFF5F5F5), 
+            Color(0xFFBDBDBD), 
+            Color(0xFF757575)
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        );
+      case 3: // Bronze
+        return const LinearGradient(
+          colors: [
+            Color(0xFFD7CCC8), // Light Copper
+            Color(0xFFA1887F), // Brownish
+            Color(0xFF5D4037), // Dark Brown
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        );
+      default:
+        return null; // No gradient for others
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Determine Tab Color
-    Color tabColor = Colors.transparent; // Default invisible
-    if (rank == 1) {tabColor = const Color(0xFFFFD700);} // Gold
-    else if (rank == 2) {tabColor = const Color(0xFFC0C0C0);} // Silver
-    else if (rank == 3) {tabColor = const Color(0xFFCD7F32);} // Bronze
+    final gradient = _getTabGradient(rank);
 
     return Container(
-      // Add Spacing between rows
-      margin: const EdgeInsets.only(bottom: 8), 
-      
-      // Decoration: Surface Color + Left Border Tab
+      margin: const EdgeInsets.only(bottom: 6),
+      height: 42, 
+      clipBehavior: Clip.antiAlias, // Ensures the child containers respect the border radius
       decoration: BoxDecoration(
-        color: AppTheme.surface, // Solid card color
-        borderRadius: const BorderRadius.only(
-          topRight: Radius.circular(4),
-          bottomRight: Radius.circular(4),
-          // Left side is flat for the tab look
-        ),
-        border: Border(
-          left: BorderSide(
-            color: tabColor, 
-            width: 6, // Thickness of the "Tab"
-          ),
-        ),
+        color: AppTheme.surface, 
+        borderRadius: BorderRadius.circular(6),
       ),
-      
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      
       child: Row(
         children: [
-          // RANK
-          SizedBox(
-            width: 60,
-            child: Text(
-              '#$rank',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppTheme.textMuted,
-                fontWeight: FontWeight.bold,
-              ),
+          // Metallic Tab Strip
+          Container(
+            width: 6,
+            decoration: BoxDecoration(
+              gradient: gradient,
+              // If no gradient (rank > 3), match the surface color or keep transparent
+              color: gradient == null ? Colors.white.withValues(alpha: 0.08) : null,
             ),
           ),
-          
-          // NAME
-          Expanded(
+
+          // Rank Box (Lighter Background)
+          Container(
+            width: 60,
+            color: Colors.white.withValues(alpha: 0.08), // Slightly lighter than surface
+            alignment: Alignment.center,
             child: Text(
-              entry.name.toUpperCase(),
+              '$rank', // Removed the '#'
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Colors.white, // Standard white text
+                color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
               ),
             ),
           ),
 
-          // SCORE
-          SizedBox(
-            width: 120,
-            child: Text(
-              entry.score.toString(),
-              textAlign: TextAlign.right,
-              style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                color: AppTheme.neonGreen, 
-                fontSize: 16,
+          // User & Score Data
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  // Name
+                  Expanded(
+                    child: Text(
+                      entry.name.toUpperCase(),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  // Score
+                  Text(
+                    entry.score.toString(),
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: AppTheme.neonGreen,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
