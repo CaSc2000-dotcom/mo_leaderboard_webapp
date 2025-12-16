@@ -39,6 +39,9 @@ dependencies:
   # HTTP fetching, caching, and asset bundling
   google_fonts: ^6.3.3
 
+  # Flutter plugin for launching a URL. Supports web, phone, SMS, and email schemes.
+  url_launcher: ^6.3.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
