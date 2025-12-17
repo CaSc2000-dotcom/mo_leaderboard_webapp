@@ -1,3 +1,7 @@
+# Visit the site now!
+
+### https://mergeonslaught-webapp.web.app
+
 # Overview
 
 As a software engineer, my goal with this project was to improve my skills in the integration of a cross-platform framework like Flutter with a robust backend-as-a-service provider to create a high-performance and responsive web application. I focused on implementing clean architecture patterns, such as separating data fetching into repositories and creating reusable UI layouts, to further my understanding of scalable web development.
@@ -6,7 +10,7 @@ This web application is the official companion site for the game *MergeOnslaught
 
 The purpose of writing this software was to bridge the gap between a standalone game and those who enjoy climbing up the leaderboard by providing a live, data-driven web app with Supabase database integration. It served as a practical application for handling asynchronous data streams, implementing real-time search filtering, and designing a theme-consistent user interface.
 
-[Software Demo Video](http://youtube.link.goes.here)
+[Software Demo Video](https://youtu.be/TrhY8TXuLoY)
 
 # Web Pages
 
