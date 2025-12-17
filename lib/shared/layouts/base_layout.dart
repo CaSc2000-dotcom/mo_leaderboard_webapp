@@ -17,15 +17,15 @@ class BaseLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const NavDrawer(),
       body: SingleChildScrollView(
         child: Column(
           children: [
             const NavBar(),
             
-            // Ensures the child content takes up space naturally
             Container(
               constraints: BoxConstraints(
-                minHeight: MediaQuery.of(context).size.height - 200, // Minimal height to push footer down
+                minHeight: MediaQuery.of(context).size.height - 200, 
               ),
               child: child,
             ),

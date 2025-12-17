@@ -10,7 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 class NavBar extends StatelessWidget {
   const NavBar({super.key});
 
-  void _navigateTo(BuildContext context, Widget page) {
+  static void navigateTo(BuildContext context, Widget page) {
     Navigator.pushReplacement(
       context,
       PageRouteBuilder(
@@ -23,6 +23,8 @@ class NavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isMobile = MediaQuery.of(context).size.width < 900;
+
     return Container(
       height: 80,
       padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -32,43 +34,106 @@ class NavBar extends StatelessWidget {
       ),
       child: Row(
         children: [
+          // Hamburger Menu for Mobile
+          if (isMobile)
+            IconButton(
+              icon: const Icon(Icons.menu, color: AppTheme.textPrimary),
+              onPressed: () => Scaffold.of(context).openDrawer(),
+            ),
+
           // Logo Area
           InkWell(
-            onTap: () => _navigateTo(context, const HomePage()),
+            onTap: () => navigateTo(context, const HomePage()),
             child: Row(
               children: [
                 const Icon(Icons.castle, size: 40, color: AppTheme.textPrimary),
                 const SizedBox(width: 8),
-                Text("MergeOnslaught", style: Theme.of(context).textTheme.displayLarge?.copyWith(fontSize: 24)),
+                // Hide text on extremely small screens if necessary
+                if (MediaQuery.of(context).size.width > 400)
+                  Text("MergeOnslaught", 
+                    style: Theme.of(context).textTheme.displayLarge?.copyWith(fontSize: 24)),
               ],
             ),
           ),  
           
           const Spacer(),
 
-          // Navigation Links (Desktop view)
-          // TODO: Make these their own widgets with hover effects
-          _NavBarItem(title: "NEWS", onTap: () => _navigateTo(context, const NewsPage())),
-          _NavBarItem(title: "LEADERBOARDS", onTap: () => _navigateTo(context, const LeaderboardPage())),
-          _NavBarItem(title: "HOW TO PLAY", onTap: () => _navigateTo(context, const HowToPlayPage())),
+          // Navigation Links (Desktop only)
+          if (!isMobile) ...[
+            _NavBarItem(title: "NEWS", onTap: () => navigateTo(context, const NewsPage())),
+            _NavBarItem(title: "LEADERBOARDS", onTap: () => navigateTo(context, const LeaderboardPage())),
+            _NavBarItem(title: "HOW TO PLAY", onTap: () => navigateTo(context, const HowToPlayPage())),
+            const SizedBox(width: 40),
+          ],
 
-          const SizedBox(width: 40),
-
-          // CTA Button
-          ElevatedButton(
-            onPressed: () async {
-              final url = Uri.parse("https://casc2000-dotcom.github.io/MergeOnslaught/");
-              if (await canLaunchUrl(url)) {
-                await launchUrl(
-                  url,
-                  mode: LaunchMode.externalApplication,
-                );
-              }
-            },
-            child: const Text("PLAY NOW"),
-          ),
+          // CTA Button - Always visible at top right
+          const _PlayNowButton(),
         ],
       ),
+    );
+  }
+}
+
+class _PlayNowButton extends StatelessWidget {
+  const _PlayNowButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () async {
+        final url = Uri.parse("https://casc2000-dotcom.github.io/MergeOnslaught/");
+        if (await canLaunchUrl(url)) {
+          await launchUrl(
+            url,
+            mode: LaunchMode.externalApplication,
+          );
+        }
+      },
+      child: const Text("PLAY NOW"),
+    );
+  }
+}
+
+class NavDrawer extends StatelessWidget {
+  const NavDrawer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      backgroundColor: AppTheme.background,
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          const DrawerHeader(
+            decoration: BoxDecoration(color: AppTheme.surface),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.castle, size: 50, color: AppTheme.neonGreen),
+                SizedBox(height: 10),
+                Text("NAVIGATION", style: TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold)),
+              ],
+            ),
+          ),
+          _DrawerItem(title: "NEWS", page: const NewsPage()),
+          _DrawerItem(title: "LEADERBOARDS", page: const LeaderboardPage()),
+          _DrawerItem(title: "HOW TO PLAY", page: const HowToPlayPage()),
+        ],
+      ),
+    );
+  }
+}
+
+class _DrawerItem extends StatelessWidget {
+  final String title;
+  final Widget page;
+  const _DrawerItem({required this.title, required this.page});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(title, style: Theme.of(context).textTheme.labelLarge?.copyWith(color: AppTheme.textPrimary)),
+      onTap: () => NavBar.navigateTo(context, page),
     );
   }
 }
