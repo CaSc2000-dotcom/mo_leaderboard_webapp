@@ -32,7 +32,7 @@ class _HeroBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     // Calculate height to fill most of the screen (minus navbar approx)
     final screenHeight = MediaQuery.of(context).size.height;
-    final bannerHeight = (screenHeight * 0.85).clamp(500.0, 1000.0);
+    final bannerHeight = (screenHeight * 0.50).clamp(500.0, 1000.0);
 
     return SizedBox(
       height: bannerHeight,
@@ -156,7 +156,7 @@ class _GameInfoSection extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
+                            color: Colors.black.withValues(alpha: 0.2),
                             blurRadius: 8,
                             offset: const Offset(0, 4),
                           ),

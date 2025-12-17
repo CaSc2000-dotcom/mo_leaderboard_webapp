@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
 // Pages
 import '../../features/home/screens/home_page.dart';
-import '../../features/news/screens/news_page.dart';
 import '../../features/leaderboard/screens/leaderboard_page.dart';
-import '../../features/how_to_play/screens/how_to_play_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NavBar extends StatelessWidget {
@@ -60,9 +58,7 @@ class NavBar extends StatelessWidget {
 
           // Navigation Links (Desktop only)
           if (!isMobile) ...[
-            _NavBarItem(title: "NEWS", onTap: () => navigateTo(context, const NewsPage())),
             _NavBarItem(title: "LEADERBOARDS", onTap: () => navigateTo(context, const LeaderboardPage())),
-            _NavBarItem(title: "HOW TO PLAY", onTap: () => navigateTo(context, const HowToPlayPage())),
             const SizedBox(width: 40),
           ],
 
@@ -115,9 +111,7 @@ class NavDrawer extends StatelessWidget {
               ],
             ),
           ),
-          _DrawerItem(title: "NEWS", page: const NewsPage()),
           _DrawerItem(title: "LEADERBOARDS", page: const LeaderboardPage()),
-          _DrawerItem(title: "HOW TO PLAY", page: const HowToPlayPage()),
         ],
       ),
     );
