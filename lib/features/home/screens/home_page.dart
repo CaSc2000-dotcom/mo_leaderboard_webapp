@@ -55,7 +55,7 @@ class _HeroBanner extends StatelessWidget {
                 ),
                 child: Center(
                   child: Image.asset( 
-                    'assets/images/placeholder.gif',
+                    'assets/images/gameplay-gif.gif',
                     fit: BoxFit.cover,
                     width: double.infinity,
                     height: double.infinity,
@@ -153,21 +153,17 @@ class _GameInfoSection extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return Container(
                       decoration: BoxDecoration(
-                        color: AppTheme.surface,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: AppTheme.surfaceDark),
-                      ),
-                      child: Center(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.image, size: 48, color: AppTheme.textMuted),
-                            const SizedBox(height: 12),
-                            Text(
-                              "SCREENSHOT ${index + 1}",
-                              style: Theme.of(context).textTheme.labelLarge,
-                            ),
-                          ],
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 8,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/screenshot_${index + 1}.png'),
+                          fit: BoxFit.cover,
                         ),
                       ),
                     );
